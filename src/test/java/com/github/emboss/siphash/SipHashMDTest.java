@@ -32,6 +32,8 @@ package com.github.emboss.siphash;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.security.MessageDigest;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -42,12 +44,12 @@ import static org.junit.Assert.assertEquals;
 public class SipHashMDTest {
 
     protected SipKey sipKey = SipHashTest.SPEC_KEY;
-    private SipHashMD sipHashMD;
+    private MessageDigest sipHashMD;
 
     @Before
     public void setupKeyAndMD() {
         sipHashMD = new SipHashMD(null);
-        sipHashMD.setSipKey(sipKey);
+        ((SipHashMD) sipHashMD).setSipKey(sipKey);
     }
 
     @Test
@@ -61,7 +63,7 @@ public class SipHashMDTest {
     public void spec() {
         final byte[] msg = com.github.emboss.siphash.SipHashTest.SPEC_MSG;
         sipHashMD.update(msg);
-        final long digest = sipHashMD.digestLong();
+        final long digest = ((SipHashMD) sipHashMD).digestLong();
         assertEquals(0xa129ca6149be45e5L, digest);
     }
 
@@ -69,7 +71,7 @@ public class SipHashMDTest {
     public void emptyString() throws Exception {
         final byte[] msg = "".getBytes("UTF8");
         sipHashMD.update(msg);
-        final long digest = sipHashMD.digestLong();
+        final long digest = ((SipHashMD) sipHashMD).digestLong();
         assertEquals(0x726fdb47dd0e0e31L, digest);
     }
 
@@ -77,7 +79,7 @@ public class SipHashMDTest {
     public void oneByte() throws Exception {
         final byte[] msg = "a".getBytes("UTF8");
         sipHashMD.update(msg);
-        final long digest = sipHashMD.digestLong();
+        final long digest = ((SipHashMD) sipHashMD).digestLong();
         assertEquals(0x2ba3e8e9a71148caL, digest);
     }
 
@@ -85,7 +87,7 @@ public class SipHashMDTest {
     public void sixBytes() throws Exception {
         final byte[] msg = "abcdef".getBytes("UTF8");
         sipHashMD.update(msg);
-        final long digest = sipHashMD.digestLong();
+        final long digest = ((SipHashMD) sipHashMD).digestLong();
         assertEquals(0x2a6e77e733c7c05dL, digest);
     }
 
@@ -95,7 +97,7 @@ public class SipHashMDTest {
         final byte[] msg1 = "cdef".getBytes("UTF8");
         sipHashMD.update(msg0);
         sipHashMD.update(msg1);
-        final long digest = sipHashMD.digestLong();
+        final long digest = ((SipHashMD) sipHashMD).digestLong();
         assertEquals(0x2a6e77e733c7c05dL, digest);
     }
 
@@ -103,7 +105,7 @@ public class SipHashMDTest {
     public void sevenBytes() throws Exception {
         final byte[] msg = "SipHash".getBytes("UTF8");
         sipHashMD.update(msg);
-        final long digest = sipHashMD.digestLong();
+        final long digest = ((SipHashMD) sipHashMD).digestLong();
         assertEquals(0x8325093242a96f60L, digest);
     }
 
@@ -111,7 +113,7 @@ public class SipHashMDTest {
     public void eightBytes() throws Exception {
         final byte[] msg = "12345678".getBytes("UTF8");
         sipHashMD.update(msg);
-        final long digest = sipHashMD.digestLong();
+        final long digest = ((SipHashMD) sipHashMD).digestLong();
         assertEquals(0x2130609caea37ebL, digest);
     }
 
@@ -121,7 +123,7 @@ public class SipHashMDTest {
             final byte[] msg = Utils.byteTimes(0, 1000);
             sipHashMD.update(msg);
         }
-        final long digest = sipHashMD.digestLong();
+        final long digest = ((SipHashMD) sipHashMD).digestLong();
         assertEquals(0x28205108397aa742L, digest);
     }
 
